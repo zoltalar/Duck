@@ -3,8 +3,13 @@
 use App\Country;
 use Illuminate\Database\Seeder;
 
-class CountriesSeeder extends Seeder
+final class CountriesSeeder extends Seeder
 {
+    /**
+     * Countries to import.
+     *
+     * @return  array
+     */
     protected function countries()
     {
         return [
