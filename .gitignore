@@ -6,6 +6,7 @@
 /.idea/
 .env
 .phpunit.result.cache
+composer.phar
 Homestead.json
 Homestead.yaml
 npm-debug.log
