@@ -5,6 +5,11 @@ use Spatie\Permission\Models\Role;
 
 final class RolesSeeder extends Seeder
 {
+    /**
+     * Roles to import.
+     *
+     * @return  array
+     */
     protected function roles()
     {
         return ['admin', 'user'];
