@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
-class RolesSeeder extends Seeder
+final class RolesSeeder extends Seeder
 {
     protected function roles()
     {
