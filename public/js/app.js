@@ -1777,13 +1777,41 @@ __webpack_require__.r(__webpack_exports__);
   name: 'add-post',
   data: function data() {
     return {
-      map: null
+      map: null,
+      marker: null
     };
   },
+  mounted: function mounted() {
+    google.maps.event.addDomListener(window, 'load', this.initialize);
+  },
   methods: {
-    initMap: function initMap() {
-      var mapContainer = this.$refs.googleMap;
-      this.map = new google.maps.Map(mapContainer);
+    setMarker: function setMarker(location) {
+      if (this.marker !== null) {
+        this.marker.setMap(null);
+      }
+
+      this.marker = new google.maps.Marker({
+        position: location,
+        map: this.map
+      });
+    },
+    initialize: function initialize() {
+      var _this = this;
+
+      var container = this.$refs.mapContainer;
+      var warsaw = {
+        lat: 52.23,
+        lng: 20.78
+      };
+      var options = {
+        zoom: 10,
+        center: warsaw
+      };
+      this.map = new google.maps.Map(container, options);
+      this.map.addListener('click', function (event) {
+        _this.setMarker(event.latLng);
+      });
+      this.setMarker(warsaw);
     }
   }
 });
@@ -2307,7 +2335,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-6" }, [_c("div", { ref: "googleMap" })]),
+      _c("div", { staticClass: "col-sm-6" }, [
+        _c("div", { ref: "mapContainer", staticClass: "h-500" })
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-sm-6" }, [_vm._v("2")])
     ])
