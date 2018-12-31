@@ -10,11 +10,11 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('address', 100);
+            $table->string('address', 100)->nullable();
             $table->string('address_2', 100)->nullable();
-            $table->string('city', 60);
+            $table->string('city', 60)->nullable();
             $table->smallInteger('state_id')->unsigned()->nullable();
-            $table->string('postal_code', 15);
+            $table->string('postal_code', 15)->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->string('photo')->nullable();

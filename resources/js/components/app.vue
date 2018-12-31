@@ -8,19 +8,16 @@
             <div class="collapse navbar-collapse" id="navbar-primary">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a href="#" class="nav-link">Home</a>
+                        <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
                     </li>
                     <li class="nav-item active">
-                        <a href="#" class="nav-link">Login</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a href="#" class="nav-link">Register</a>
+                        <router-link :to="{ name: 'add-post' }" class="nav-link">Add Post</router-link>
                     </li>
                 </ul>
             </div>
         </nav>
         <div class="pt-5">
-            ...
+            <router-view></router-view>
         </div>
     </div>
 </template>
