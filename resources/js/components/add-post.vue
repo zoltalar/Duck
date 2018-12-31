@@ -4,7 +4,22 @@
             <div class="col-sm-6">
                 <div ref="mapContainer" class="h-500"></div>
             </div>
-            <div class="col-sm-6">2</div>
+            <div class="col-sm-6">
+                <h5 class="mb-3">Location of the Yellow Duck</h5>
+                <address>
+                    <p class="mb-0">Latitude: 0.00</p>
+                    <p class="mb-0">Longitude: 0.00</p>
+                </address>
+                <form>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="input-photo">
+                        <label class="custom-file-label" for="input-photo">Choose Image</label>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary">Add Post</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

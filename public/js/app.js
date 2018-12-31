@@ -1773,6 +1773,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'add-post',
   data: function data() {
@@ -2339,11 +2351,43 @@ var render = function() {
         _c("div", { ref: "mapContainer", staticClass: "h-500" })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-6" }, [_vm._v("2")])
+      _vm._m(0)
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("h5", { staticClass: "mb-3" }, [
+        _vm._v("Location of the Yellow Duck")
+      ]),
+      _vm._v(" "),
+      _c("address", [
+        _c("p", { staticClass: "mb-0" }, [_vm._v("Latitude: 0.00")]),
+        _vm._v(" "),
+        _c("p", { staticClass: "mb-0" }, [_vm._v("Longitude: 0.00")])
+      ]),
+      _vm._v(" "),
+      _c("form", [
+        _c("div", { staticClass: "custom-file" }, [
+          _c("input", {
+            staticClass: "custom-file-input",
+            attrs: { type: "file", id: "input-photo" }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            { staticClass: "custom-file-label", attrs: { for: "input-photo" } },
+            [_vm._v("Choose Image")]
+          )
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
