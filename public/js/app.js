@@ -1763,6 +1763,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../router */ "./resources/js/router/index.js");
 //
 //
 //
@@ -1794,6 +1795,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'add-post',
   data: function data() {
@@ -1802,33 +1810,36 @@ __webpack_require__.r(__webpack_exports__);
       marker: null,
       latitude: null,
       longitude: null,
+      warsaw: {
+        lat: 52.22500222565406,
+        lng: 21.01116439483155
+      },
       photo: '',
       errors: {
         photo: ''
-      }
+      },
+      posted: false,
+      listener: null
     };
   },
   mounted: function mounted() {
-    google.maps.event.addDomListener(window, 'load', this.initialize);
+    console.log(this.listener);
+    this.listener = google.maps.event.addDomListener(window, 'load', this.initialize);
   },
   methods: {
     initialize: function initialize() {
       var _this = this;
 
       var container = this.$refs.mapContainer;
-      var warsaw = {
-        lat: 52.22500222565406,
-        lng: 21.01116439483155
-      };
       var options = {
         zoom: 10,
-        center: warsaw
+        center: this.warsaw
       };
       this.map = new google.maps.Map(container, options);
       this.map.addListener('click', function (event) {
         _this.setMarker(event.latLng);
       });
-      this.setMarker(warsaw);
+      this.setMarker(this.warsaw);
     },
     setMarker: function setMarker(location) {
       if (this.marker !== null) {
@@ -1878,6 +1889,23 @@ __webpack_require__.r(__webpack_exports__);
         _this2.clearErrors();
 
         _this2.setErrors(response);
+
+        if (response.data.id) {
+          _this2.posted = true;
+
+          _this2.reset();
+
+          setTimeout(function () {
+            if (_this2.listener !== null) {
+              google.maps.event.removeListener(_this2.listener);
+              _this2.listener = null;
+            }
+
+            _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+              name: 'home'
+            });
+          }, 5000);
+        }
       }).catch(function (error) {
         _this2.clearErrors();
 
@@ -1902,7 +1930,8 @@ __webpack_require__.r(__webpack_exports__);
     validated: function validated() {
       return this.latitude !== null && this.longitude !== null && this.photo !== '';
     },
-    cancel: function cancel() {
+    reset: function reset() {
+      this.setMarker(this.warsaw);
       this.photo = '';
     }
   }
@@ -2432,136 +2461,185 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-sm-5" }, [
-        _c("h5", { staticClass: "mb-3" }, [
-          _vm._v("Location of the Yellow Duck")
-        ]),
-        _vm._v(" "),
         _c(
-          "mark",
+          "div",
           {
             directives: [
               {
                 name: "show",
                 rawName: "v-show",
-                value: Boolean(this.latitude) && Boolean(this.latitude),
-                expression: "Boolean(this.latitude) && Boolean(this.latitude)"
+                value: _vm.posted,
+                expression: "posted"
               }
             ],
-            staticClass: "d-inline-block p-2 mb-3"
+            staticClass: "alert alert-success"
           },
           [
             _vm._v(
-              "<" + _vm._s(_vm.latitude) + ", " + _vm._s(_vm.longitude) + ">"
-            )
-          ]
+              "\n                Entry added successfully.\n                "
+            ),
+            _c("router-link", { attrs: { to: { name: "home" } } }, [
+              _vm._v("Home")
+            ])
+          ],
+          1
         ),
         _vm._v(" "),
-        _c("form", [
-          _c("div", { staticClass: "form-group" }, [
-            _c("div", { staticClass: "custom-file" }, [
-              _c("input", {
-                staticClass: "custom-file-input",
-                attrs: {
-                  type: "file",
-                  name: "photo",
-                  id: "input-photo",
-                  accept: "image/*"
-                },
-                on: {
-                  change: function($event) {
-                    _vm.preview($event)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "custom-file-label",
-                  attrs: { for: "input-photo" }
-                },
-                [_vm._v("Choose Photo")]
-              )
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.posted,
+                expression: "!posted"
+              }
+            ]
+          },
+          [
+            _c("h5", { staticClass: "mb-3" }, [
+              _vm._v("Location of the Yellow Duck")
             ]),
             _vm._v(" "),
             _c(
-              "div",
+              "mark",
               {
                 directives: [
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.errors.photo !== "",
-                    expression: "errors.photo !== ''"
+                    value: Boolean(this.latitude) && Boolean(this.latitude),
+                    expression:
+                      "Boolean(this.latitude) && Boolean(this.latitude)"
                   }
                 ],
-                staticClass: "invalid-feedback",
-                class: { "d-block": _vm.errors.photo !== "" }
+                staticClass: "d-inline-block p-2 mb-3"
               },
               [
                 _vm._v(
-                  "\n                        " +
-                    _vm._s(_vm.errors.photo) +
-                    "\n                    "
+                  "<" +
+                    _vm._s(_vm.latitude) +
+                    ", " +
+                    _vm._s(_vm.longitude) +
+                    ">"
                 )
               ]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.photo !== "",
-                  expression: "photo !== ''"
-                }
-              ],
-              staticClass: "form-group"
-            },
-            [_c("img", { staticClass: "img-fluid", attrs: { src: _vm.photo } })]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c(
-              "button",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.validated(),
-                    expression: "validated()"
-                  }
-                ],
-                staticClass: "btn btn-default float-right",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.cancel()
-                  }
-                }
-              },
-              [_vm._v("Cancel")]
             ),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                attrs: { type: "button", disabled: !_vm.validated() },
-                on: {
-                  click: function($event) {
-                    _vm.submit()
-                  }
-                }
-              },
-              [_vm._v("Submit")]
-            )
-          ])
-        ])
+            _c("form", [
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "custom-file" }, [
+                  _c("input", {
+                    staticClass: "custom-file-input",
+                    attrs: {
+                      type: "file",
+                      name: "photo",
+                      id: "input-photo",
+                      accept: "image/*"
+                    },
+                    on: {
+                      change: function($event) {
+                        _vm.preview($event)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-file-label",
+                      attrs: { for: "input-photo" }
+                    },
+                    [_vm._v("Choose Photo")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.errors.photo !== "",
+                        expression: "errors.photo !== ''"
+                      }
+                    ],
+                    staticClass: "invalid-feedback",
+                    class: { "d-block": _vm.errors.photo !== "" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(_vm.errors.photo) +
+                        "\n                        "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.photo !== "",
+                      expression: "photo !== ''"
+                    }
+                  ],
+                  staticClass: "form-group"
+                },
+                [
+                  _c("img", {
+                    staticClass: "img-fluid",
+                    attrs: { src: _vm.photo }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c(
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.validated(),
+                        expression: "validated()"
+                      }
+                    ],
+                    staticClass: "btn btn-default float-right",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.reset()
+                      }
+                    }
+                  },
+                  [_vm._v("Cancel")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button", disabled: !_vm.validated() },
+                    on: {
+                      click: function($event) {
+                        _vm.submit()
+                      }
+                    }
+                  },
+                  [_vm._v("Submit")]
+                )
+              ])
+            ])
+          ]
+        )
       ])
     ])
   ])

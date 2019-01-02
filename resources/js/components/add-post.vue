@@ -5,31 +5,39 @@
                 <div ref="mapContainer" class="h-500"></div>
             </div>
             <div class="col-sm-5">
-                <h5 class="mb-3">Location of the Yellow Duck</h5>
-                <mark class="d-inline-block p-2 mb-3" v-show="Boolean(this.latitude) && Boolean(this.latitude)">&lt;{{ latitude }}, {{ longitude}}&gt;</mark>
-                <form>
-                    <div class="form-group">
-                        <div class="custom-file">
-                            <input type="file" name="photo" class="custom-file-input" id="input-photo" accept="image/*" @change="preview($event)">
-                            <label class="custom-file-label" for="input-photo">Choose Photo</label>
+                <div class="alert alert-success" v-show="posted">
+                    Entry added successfully.
+                    <router-link :to="{ name: 'home' }">Home</router-link>
+                </div>
+                <div v-show="!posted">
+                    <h5 class="mb-3">Location of the Yellow Duck</h5>
+                    <mark class="d-inline-block p-2 mb-3" v-show="Boolean(this.latitude) && Boolean(this.latitude)">&lt;{{ latitude }}, {{ longitude}}&gt;</mark>
+                    <form>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" name="photo" class="custom-file-input" id="input-photo" accept="image/*" @change="preview($event)">
+                                <label class="custom-file-label" for="input-photo">Choose Photo</label>
+                            </div>
+                            <div class="invalid-feedback" v-show="errors.photo !== ''" :class="{ 'd-block': errors.photo !== '' }">
+                                {{ errors.photo }}
+                            </div>
                         </div>
-                        <div class="invalid-feedback" v-show="errors.photo !== ''" :class="{ 'd-block': errors.photo !== '' }">
-                            {{ errors.photo }}
+                        <div class="form-group" v-show="photo !== ''">
+                            <img :src="photo" class="img-fluid">
                         </div>
-                    </div>
-                    <div class="form-group" v-show="photo !== ''">
-                        <img :src="photo" class="img-fluid">
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default float-right" @click="cancel()" v-show="validated()">Cancel</button>
-                        <button type="button" class="btn btn-primary" @click="submit()" :disabled="!validated()">Submit</button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default float-right" @click="reset()" v-show="validated()">Cancel</button>
+                            <button type="button" class="btn btn-primary" @click="submit()" :disabled="!validated()">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+    import router from '../router'
+
     export default {
         name: 'add-post',
         data() {
@@ -38,27 +46,28 @@
                 marker: null,
                 latitude: null,
                 longitude: null,
+                warsaw: {
+                    lat: 52.22500222565406,
+                    lng: 21.01116439483155
+                },
                 photo: '',
                 errors: {
                     photo: ''
-                }
+                },
+                posted: false,
+                listener: null
             }
         },
         mounted() {
-            google.maps.event.addDomListener(window, 'load', this.initialize)
+            this.listener = google.maps.event.addDomListener(window, 'load', this.initialize)
         },
         methods: {
             initialize() {
                 let container = this.$refs.mapContainer
 
-                let warsaw = {
-                    lat: 52.22500222565406,
-                    lng: 21.01116439483155
-                }
-
                 let options = {
                     zoom: 10,
-                    center: warsaw
+                    center: this.warsaw
                 }
 
                 this.map = new google.maps.Map(container, options)
@@ -67,7 +76,7 @@
                     this.setMarker(event.latLng)
                 })
 
-                this.setMarker(warsaw)
+                this.setMarker(this.warsaw)
             },
             setMarker(location) {
                 if (this.marker !== null) {
@@ -117,6 +126,19 @@
                     .then(response => {
                         this.clearErrors()
                         this.setErrors(response)
+
+                        if (response.data.id) {
+                            this.posted = true;
+                            this.reset()
+
+                            setTimeout(() => {
+                                if (this.listener !== null) {
+                                    google.maps.event.removeListener(this.listener)
+                                    this.listener = null
+                                }
+                                router.push({ name: 'home' })
+                            }, 5000)
+                        }
                     })
                     .catch(error => {
                         this.clearErrors()
@@ -143,7 +165,8 @@
                     this.photo !== ''
                 )
             },
-            cancel() {
+            reset() {
+                this.setMarker(this.warsaw)
                 this.photo = '';
             }
         }
