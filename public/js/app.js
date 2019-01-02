@@ -1785,35 +1785,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'add-post',
   data: function data() {
     return {
       map: null,
-      marker: null
+      marker: null,
+      latitude: null,
+      longitude: null,
+      photo: '',
+      errors: {
+        photo: ''
+      }
     };
   },
   mounted: function mounted() {
     google.maps.event.addDomListener(window, 'load', this.initialize);
   },
   methods: {
-    setMarker: function setMarker(location) {
-      if (this.marker !== null) {
-        this.marker.setMap(null);
-      }
-
-      this.marker = new google.maps.Marker({
-        position: location,
-        map: this.map
-      });
-    },
     initialize: function initialize() {
       var _this = this;
 
       var container = this.$refs.mapContainer;
       var warsaw = {
-        lat: 52.23,
-        lng: 20.78
+        lat: 52.22500222565406,
+        lng: 21.01116439483155
       };
       var options = {
         zoom: 10,
@@ -1824,6 +1829,81 @@ __webpack_require__.r(__webpack_exports__);
         _this.setMarker(event.latLng);
       });
       this.setMarker(warsaw);
+    },
+    setMarker: function setMarker(location) {
+      if (this.marker !== null) {
+        this.marker.setMap(null);
+      }
+
+      this.marker = new google.maps.Marker({
+        position: location,
+        map: this.map
+      });
+
+      if (typeof location.lat === 'function') {
+        this.latitude = location.lat();
+      } else {
+        this.latitude = location.lat;
+      }
+
+      if (typeof location.lng === 'function') {
+        this.longitude = location.lng();
+      } else {
+        this.longitude = location.lng;
+      }
+    },
+    clearErrors: function clearErrors() {
+      this.errors = {
+        photo: ''
+      };
+    },
+    setErrors: function setErrors(response) {
+      if (response.data.errors) {
+        for (var property in response.data.errors) {
+          if (response.data.errors[property][0]) {
+            this.errors[property] = response.data.errors[property][0];
+          }
+        }
+      }
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+      axios.post('/posts/store', {
+        latitude: this.latitude,
+        longitude: this.longitude,
+        photo: this.photo
+      }).then(function (response) {
+        _this2.clearErrors();
+
+        _this2.setErrors(response);
+      }).catch(function (error) {
+        _this2.clearErrors();
+
+        _this2.setErrors(error.response);
+      });
+    },
+    preview: function preview(event) {
+      var _this3 = this;
+
+      var files = event.target.files;
+
+      if (files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          _this3.photo = event.target.result;
+        };
+
+        reader.readAsDataURL(files[0]);
+      }
+    },
+    validated: function validated() {
+      return this.latitude !== null && this.longitude !== null && this.photo !== '';
+    },
+    cancel: function cancel() {
+      this.photo = '';
     }
   }
 });
@@ -2347,47 +2427,146 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-6" }, [
+      _c("div", { staticClass: "col-sm-7" }, [
         _c("div", { ref: "mapContainer", staticClass: "h-500" })
       ]),
       _vm._v(" "),
-      _vm._m(0)
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-6" }, [
-      _c("h5", { staticClass: "mb-3" }, [
-        _vm._v("Location of the Yellow Duck")
-      ]),
-      _vm._v(" "),
-      _c("address", [
-        _c("p", { staticClass: "mb-0" }, [_vm._v("Latitude: 0.00")]),
+      _c("div", { staticClass: "col-sm-5" }, [
+        _c("h5", { staticClass: "mb-3" }, [
+          _vm._v("Location of the Yellow Duck")
+        ]),
         _vm._v(" "),
-        _c("p", { staticClass: "mb-0" }, [_vm._v("Longitude: 0.00")])
-      ]),
-      _vm._v(" "),
-      _c("form", [
-        _c("div", { staticClass: "custom-file" }, [
-          _c("input", {
-            staticClass: "custom-file-input",
-            attrs: { type: "file", id: "input-photo" }
-          }),
+        _c(
+          "mark",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: Boolean(this.latitude) && Boolean(this.latitude),
+                expression: "Boolean(this.latitude) && Boolean(this.latitude)"
+              }
+            ],
+            staticClass: "d-inline-block p-2 mb-3"
+          },
+          [
+            _vm._v(
+              "<" + _vm._s(_vm.latitude) + ", " + _vm._s(_vm.longitude) + ">"
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("form", [
+          _c("div", { staticClass: "form-group" }, [
+            _c("div", { staticClass: "custom-file" }, [
+              _c("input", {
+                staticClass: "custom-file-input",
+                attrs: {
+                  type: "file",
+                  name: "photo",
+                  id: "input-photo",
+                  accept: "image/*"
+                },
+                on: {
+                  change: function($event) {
+                    _vm.preview($event)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "custom-file-label",
+                  attrs: { for: "input-photo" }
+                },
+                [_vm._v("Choose Photo")]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.photo !== "",
+                    expression: "errors.photo !== ''"
+                  }
+                ],
+                staticClass: "invalid-feedback",
+                class: { "d-block": _vm.errors.photo !== "" }
+              },
+              [
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(_vm.errors.photo) +
+                    "\n                    "
+                )
+              ]
+            )
+          ]),
           _vm._v(" "),
           _c(
-            "label",
-            { staticClass: "custom-file-label", attrs: { for: "input-photo" } },
-            [_vm._v("Choose Image")]
-          )
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.photo !== "",
+                  expression: "photo !== ''"
+                }
+              ],
+              staticClass: "form-group"
+            },
+            [_c("img", { staticClass: "img-fluid", attrs: { src: _vm.photo } })]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.validated(),
+                    expression: "validated()"
+                  }
+                ],
+                staticClass: "btn btn-default float-right",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.cancel()
+                  }
+                }
+              },
+              [_vm._v("Cancel")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { type: "button", disabled: !_vm.validated() },
+                on: {
+                  click: function($event) {
+                    _vm.submit()
+                  }
+                }
+              },
+              [_vm._v("Submit")]
+            )
+          ])
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

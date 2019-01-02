@@ -15,8 +15,8 @@ class CreatePostsTable extends Migration
             $table->string('city', 60)->nullable();
             $table->smallInteger('state_id')->unsigned()->nullable();
             $table->string('postal_code', 15)->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->string('photo')->nullable();
             $table->boolean('active')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
