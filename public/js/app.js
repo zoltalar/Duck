@@ -1879,7 +1879,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
-      axios.post('/posts/store', {
+      axios.post('/api/posts/store', {
         latitude: this.latitude,
         longitude: this.longitude,
         photo: this.photo
@@ -1888,7 +1888,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.setErrors(response);
 
-        if (response.data.id) {
+        if (response.data.data.id) {
           _this2.posted = true;
 
           _this2.reset();

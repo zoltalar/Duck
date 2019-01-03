@@ -117,7 +117,7 @@
                 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 
                 axios
-                    .post('/posts/store', {
+                    .post('/api/posts/store', {
                         latitude: this.latitude,
                         longitude: this.longitude,
                         photo: this.photo
@@ -126,7 +126,7 @@
                         this.clearErrors()
                         this.setErrors(response)
 
-                        if (response.data.id) {
+                        if (response.data.data.id) {
                             this.posted = true;
                             this.reset()
 

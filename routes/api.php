@@ -15,3 +15,7 @@ Route::group(['prefix' => 'auth'], function() {
     Route::post('login', ['as' => 'login', 'uses' => 'Api\AuthController@login']);
     Route::post('register', ['as' => 'register', 'uses' => 'Api\AuthController@register']);
 });
+
+Route::group(['prefix' => 'posts'], function() {
+    Route::post('store', 'Api\PostsController@store');
+});
