@@ -7,10 +7,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-primary">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
+                        <router-link :to="{ name: 'login' }" class="nav-link">Login</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{ name: 'register' }" class="nav-link">Register</router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link :to="{ name: 'add-post' }" class="nav-link">Add Post</router-link>
                     </li>
                 </ul>
