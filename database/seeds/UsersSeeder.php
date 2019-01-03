@@ -3,7 +3,7 @@
 use App\User;
 use Illuminate\Database\Seeder;
 
-class UsersSeeder extends Seeder
+final class UsersSeeder extends Seeder
 {
     /**
      * Users to import.
