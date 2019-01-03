@@ -17,7 +17,7 @@ let router = new VueRouter({
             path: '/add-post',
             name: 'add-post',
             component: require('../components/add-post').default,
-            meta: { auth: false }
+            meta: { auth: true }
         },
         {
             path: '/login',

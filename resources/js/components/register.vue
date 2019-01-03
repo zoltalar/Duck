@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" placeholder="E-mail Address" maxlength="191" v-model="email">
+                    <input type="email" class="form-control" placeholder="Email" maxlength="191" v-model="email">
                     <div class="invalid-feedback" v-show="error.email !== ''" :class="{ 'd-block': error.email !== '' }">
                         {{ error.email }}
                     </div>
