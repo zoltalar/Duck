@@ -54,12 +54,11 @@
                 errors: {
                     photo: ''
                 },
-                posted: false,
-                listener: null
+                posted: false
             }
         },
         mounted() {
-            this.listener = google.maps.event.addDomListener(window, 'load', this.initialize)
+            this.initialize()
         },
         methods: {
             initialize() {
@@ -132,10 +131,6 @@
                             this.reset()
 
                             setTimeout(() => {
-                                if (this.listener !== null) {
-                                    google.maps.event.removeListener(this.listener)
-                                    this.listener = null
-                                }
                                 router.push({ name: 'home' })
                             }, 5000)
                         }

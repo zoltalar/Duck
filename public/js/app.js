@@ -1818,13 +1818,11 @@ __webpack_require__.r(__webpack_exports__);
       errors: {
         photo: ''
       },
-      posted: false,
-      listener: null
+      posted: false
     };
   },
   mounted: function mounted() {
-    console.log(this.listener);
-    this.listener = google.maps.event.addDomListener(window, 'load', this.initialize);
+    this.initialize();
   },
   methods: {
     initialize: function initialize() {
@@ -1896,11 +1894,6 @@ __webpack_require__.r(__webpack_exports__);
           _this2.reset();
 
           setTimeout(function () {
-            if (_this2.listener !== null) {
-              google.maps.event.removeListener(_this2.listener);
-              _this2.listener = null;
-            }
-
             _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
               name: 'home'
             });
