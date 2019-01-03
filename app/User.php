@@ -23,18 +23,4 @@ final class User extends Authenticatable
         'password',
         'remember_token'
     ];
-
-    /**
-     * General validation rules.
-     *
-     * @return  array
-     */
-    public static function rules()
-    {
-        return [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:5|max:10'
-        ];
-    }
 }

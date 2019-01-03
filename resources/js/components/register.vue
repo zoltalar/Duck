@@ -9,20 +9,20 @@
                 <h3 class="mb-3">Register</h3>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Name" maxlength="191" v-model="name">
-                    <div class="invalid-feedback" v-show="error.name !== ''" :class="{ 'd-block': error.name !== '' }">
-                        {{ error.name }}
+                    <div class="invalid-feedback" v-show="errors.name !== ''" :class="{ 'd-block': errors.errors !== '' }">
+                        {{ errors.name }}
                     </div>
                 </div>
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="Email" maxlength="191" v-model="email">
-                    <div class="invalid-feedback" v-show="error.email !== ''" :class="{ 'd-block': error.email !== '' }">
-                        {{ error.email }}
+                    <div class="invalid-feedback" v-show="errors.email !== ''" :class="{ 'd-block': errors.email !== '' }">
+                        {{ errors.email }}
                     </div>
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Password" maxlength="40" v-model="password">
-                    <div class="invalid-feedback" v-show="error.password !== ''" :class="{ 'd-block': error.password !== '' }">
-                        {{ error.password }}
+                    <div class="invalid-feedback" v-show="errors.password !== ''" :class="{ 'd-block': errors.password !== '' }">
+                        {{ errors.password }}
                     </div>
                 </div>
                 <div>
@@ -39,7 +39,7 @@
                 name: '',
                 email: '',
                 password: '',
-                error: {
+                errors: {
                     name: '',
                     email: '',
                     password: ''
@@ -56,28 +56,36 @@
                         password: this.password
                     })
                     .then(response => {
-                        this.reset()
+                        this.clearErrors()
+                        this.setErrors(response)
 
-                        if (response.data.error) {
-                            for (let property in response.data.error) {
-                                if (response.data.error[property][0]) {
-                                    this.error[property] = response.data.error[property][0]
-                                }
-                            }
-                        } else {
+                        if (response.data.data.id) {
                             this.registered = true
                         }
                     })
+                    .catch(error => {
+                        this.clearErrors()
+                        this.setErrors(error.response)
+                    })
             },
-            validated() {
-                return this.name !== '' && this.email !== '' && this.password !== ''
-            },
-            reset() {
-                this.error = {
+            clearErrors() {
+                this.errors = {
                     name: '',
                     email: '',
                     password: ''
                 }
+            },
+            setErrors(response) {
+                if (response.data.errors) {
+                    for (let property in response.data.errors) {
+                        if (response.data.errors[property][0]) {
+                            this.errors[property] = response.data.errors[property][0]
+                        }
+                    }
+                }
+            },
+            validated() {
+                return this.name !== '' && this.email !== '' && this.password !== ''
             }
         }
     }

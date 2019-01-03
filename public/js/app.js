@@ -2096,7 +2096,7 @@ __webpack_require__.r(__webpack_exports__);
       name: '',
       email: '',
       password: '',
-      error: {
+      errors: {
         name: '',
         email: '',
         password: ''
@@ -2113,28 +2113,37 @@ __webpack_require__.r(__webpack_exports__);
         email: this.email,
         password: this.password
       }).then(function (response) {
-        _this.reset();
+        _this.clearErrors();
 
-        if (response.data.error) {
-          for (var property in response.data.error) {
-            if (response.data.error[property][0]) {
-              _this.error[property] = response.data.error[property][0];
-            }
-          }
-        } else {
+        _this.setErrors(response);
+
+        if (response.data.data.id) {
           _this.registered = true;
         }
+      }).catch(function (error) {
+        _this.clearErrors();
+
+        _this.setErrors(error.response);
       });
     },
-    validated: function validated() {
-      return this.name !== '' && this.email !== '' && this.password !== '';
-    },
-    reset: function reset() {
-      this.error = {
+    clearErrors: function clearErrors() {
+      this.errors = {
         name: '',
         email: '',
         password: ''
       };
+    },
+    setErrors: function setErrors(response) {
+      if (response.data.errors) {
+        for (var property in response.data.errors) {
+          if (response.data.errors[property][0]) {
+            this.errors[property] = response.data.errors[property][0];
+          }
+        }
+      }
+    },
+    validated: function validated() {
+      return this.name !== '' && this.email !== '' && this.password !== '';
     }
   }
 });
@@ -3252,17 +3261,17 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.error.name !== "",
-                    expression: "error.name !== ''"
+                    value: _vm.errors.name !== "",
+                    expression: "errors.name !== ''"
                   }
                 ],
                 staticClass: "invalid-feedback",
-                class: { "d-block": _vm.error.name !== "" }
+                class: { "d-block": _vm.errors.errors !== "" }
               },
               [
                 _vm._v(
                   "\n                    " +
-                    _vm._s(_vm.error.name) +
+                    _vm._s(_vm.errors.name) +
                     "\n                "
                 )
               ]
@@ -3299,17 +3308,17 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.error.email !== "",
-                    expression: "error.email !== ''"
+                    value: _vm.errors.email !== "",
+                    expression: "errors.email !== ''"
                   }
                 ],
                 staticClass: "invalid-feedback",
-                class: { "d-block": _vm.error.email !== "" }
+                class: { "d-block": _vm.errors.email !== "" }
               },
               [
                 _vm._v(
                   "\n                    " +
-                    _vm._s(_vm.error.email) +
+                    _vm._s(_vm.errors.email) +
                     "\n                "
                 )
               ]
@@ -3350,17 +3359,17 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.error.password !== "",
-                    expression: "error.password !== ''"
+                    value: _vm.errors.password !== "",
+                    expression: "errors.password !== ''"
                   }
                 ],
                 staticClass: "invalid-feedback",
-                class: { "d-block": _vm.error.password !== "" }
+                class: { "d-block": _vm.errors.password !== "" }
               },
               [
                 _vm._v(
                   "\n                    " +
-                    _vm._s(_vm.error.password) +
+                    _vm._s(_vm.errors.password) +
                     "\n                "
                 )
               ]
