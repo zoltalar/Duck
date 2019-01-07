@@ -20,6 +20,12 @@ let router = new VueRouter({
             meta: { auth: true }
         },
         {
+            path: '/posts',
+            name: 'posts',
+            component: require('../components/posts').default,
+            meta: { auth: true }
+        },
+        {
             path: '/login',
             name: 'login',
             component: require('../components/login').default,

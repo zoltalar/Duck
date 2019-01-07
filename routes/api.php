@@ -17,5 +17,6 @@ Route::group(['prefix' => 'auth'], function() {
 });
 
 Route::group(['prefix' => 'posts'], function() {
+    Route::get('index', 'Api\PostsController@index');
     Route::post('store', 'Api\PostsController@store');
 });

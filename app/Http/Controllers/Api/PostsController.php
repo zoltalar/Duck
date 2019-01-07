@@ -14,6 +14,11 @@ class PostsController extends Controller
         $this->middleware('auth:api');
     }
 
+    public function index()
+    {
+        return PostResource::collection(Post::paginate());
+    }
+
     public function store(StorePostRequest $request)
     {
         $post = new Post();

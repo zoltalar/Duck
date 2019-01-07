@@ -28,7 +28,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            'expires_at' => $token->expires_at->toDateTimeString()
+            'expires_at' => $token->expires_at->toDateTimeString(),
+            'user' => new UserResource($user)
         ]);
     }
 
@@ -36,9 +37,10 @@ class AuthController extends Controller
     {
         $user = new User();
         $user->fill($request->only($user->getFillable()));
-        $user->password = bcrypt($request->password);
 
         if ($user->save()) {
+            $user->assignRole('user');
+
             return new UserResource($user);
         }
     }

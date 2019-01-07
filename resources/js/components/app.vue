@@ -19,6 +19,9 @@
                     <li class="nav-item">
                         <router-link :to="{ name: 'add-post' }" class="nav-link">Add Post</router-link>
                     </li>
+                    <li class="nav-item" v-show="isAdmin() === true">
+                        <router-link :to="{ name: 'posts' }" class="nav-link">Posts</router-link>
+                    </li>
                     <li class="nav-item" v-show="loggedIn() === true">
                         <a href="#" class="nav-link" @click="logout">Logout</a>
                     </li>
@@ -38,6 +41,15 @@
             },
             loggedIn() {
                 return this.$store.getters.loggedIn
+            },
+            isAdmin() {
+                let user = this.$store.getters.user
+
+                if (user !== null) {
+                    return user.roles.indexOf('admin') != -1
+                }
+
+                return false
             }
         }
     }
