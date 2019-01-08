@@ -12,7 +12,8 @@ class Post extends JsonResource
             'id' => $this->id,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'photo' => storage_path($this->photo)
+            'photo' => \Storage::disk('public')->url($this->photo),
+            'active' => $this->active
         ];
     }
 }

@@ -29,4 +29,33 @@ class PostsController extends Controller
             return new PostResource($post);
         }
     }
+
+    public function approve($id)
+    {
+        $post = Post::find($id);
+
+        if ($post !== null) {
+            $post->active = 1;
+            $post->save();
+
+            return new PostResource($post);
+        }
+    }
+
+    public function disapprove($id)
+    {
+        $post = Post::find($id);
+
+        if ($post !== null) {
+            $post->active = 0;
+            $post->save();
+
+            return new PostResource($post);
+        }
+    }
+
+    public function destroy($id)
+    {
+        return response()->json(['count' => Post::destroy($id)]);
+    }
 }

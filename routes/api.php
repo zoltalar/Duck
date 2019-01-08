@@ -19,4 +19,7 @@ Route::group(['prefix' => 'auth'], function() {
 Route::group(['prefix' => 'posts'], function() {
     Route::get('index', 'Api\PostsController@index');
     Route::post('store', 'Api\PostsController@store');
+    Route::get('approve/{id}', 'Api\PostsController@approve');
+    Route::get('disapprove/{id}', 'Api\PostsController@disapprove');
+    Route::post('destroy/{id}', 'Api\PostsController@destroy');
 });

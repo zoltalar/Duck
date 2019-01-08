@@ -2083,6 +2083,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'posts',
   data: function data() {
@@ -2097,6 +2103,31 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/posts/index').then(function (response) {
         _this.posts = response.data.data;
       });
+    },
+    approve: function approve(id, i) {
+      var _this2 = this;
+
+      axios.get('/api/posts/approve/' + id).then(function (response) {
+        _this2.posts[i].active = 1;
+      });
+    },
+    disapprove: function disapprove(id, i) {
+      var _this3 = this;
+
+      axios.get('/api/posts/disapprove/' + id).then(function (response) {
+        _this3.posts[i].active = 0;
+      });
+    },
+    destroy: function destroy(id) {
+      var _this4 = this;
+
+      if (confirm('Are you sure?')) {
+        axios.post('/api/posts/destroy/' + id).then(function (response) {
+          _this4.posts = _this4.posts.filter(function (item) {
+            return item.id != id;
+          });
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -3163,7 +3194,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-sm-4 offset-sm-4" }, [
+    _c("div", { staticClass: "col-sm-6 col-md-4 offset-sm-3 offset-md-4" }, [
       _c("form", [
         _c("h3", { staticClass: "mb-3" }, [_vm._v("Login")]),
         _vm._v(" "),
@@ -3280,12 +3311,41 @@ var render = function() {
     _c("h3", { staticClass: "mb-4" }, [_vm._v("Posts")]),
     _vm._v(" "),
     _c(
+      "p",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.posts.length == 0,
+            expression: "posts.length == 0"
+          }
+        ],
+        staticClass: "mb-0"
+      },
+      [_vm._v("There are no posts to display")]
+    ),
+    _vm._v(" "),
+    _c(
       "div",
-      { staticClass: "row" },
-      _vm._l(_vm.posts, function(post) {
-        return _c("div", { staticClass: "col-sm-3" }, [
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.posts.length > 0,
+            expression: "posts.length > 0"
+          }
+        ],
+        staticClass: "row"
+      },
+      _vm._l(_vm.posts, function(post, i) {
+        return _c("div", { staticClass: "col-md-4" }, [
           _c("div", { staticClass: "card" }, [
-            _c("img", { staticClass: "card-img-top" }),
+            _c("img", {
+              staticClass: "card-img-top",
+              attrs: { alt: "Duck", src: post.photo }
+            }),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _c("mark", { staticClass: "small" }, [
@@ -3295,6 +3355,50 @@ var render = function() {
                     ", " +
                     _vm._s(post.longitude) +
                     ">"
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "mt-2 mb-0" }, [
+                Number(post.active) == 1
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "card-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            _vm.disapprove(post.id, i)
+                          }
+                        }
+                      },
+                      [_vm._v("Disapprove")]
+                    )
+                  : _c(
+                      "a",
+                      {
+                        staticClass: "card-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            _vm.approve(post.id, i)
+                          }
+                        }
+                      },
+                      [_vm._v("Approve")]
+                    ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "card-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        _vm.destroy(post.id)
+                      }
+                    }
+                  },
+                  [_vm._v("Delete")]
                 )
               ])
             ])

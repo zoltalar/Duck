@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-sm-4 offset-sm-4">
+        <div class="col-sm-6 col-md-4 offset-sm-3 offset-md-4">
             <form>
                 <h3 class="mb-3">Login</h3>
                 <div class="alert alert-danger text-center" v-show="error">Invalid login credentials</div>
