@@ -1818,8 +1818,16 @@ __webpack_require__.r(__webpack_exports__);
       errors: {
         photo: ''
       },
-      posted: false
+      posted: false,
+      timeout: null
     };
+  },
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    if (this.timeout !== null) {
+      clearTimeout(this.timeout);
+    }
+
+    next();
   },
   mounted: function mounted() {
     this.initialize();
@@ -1893,7 +1901,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.reset();
 
-          setTimeout(function () {
+          _this2.timeout = setTimeout(function () {
             _router__WEBPACK_IMPORTED_MODULE_0__["default"].push({
               name: 'home'
             });

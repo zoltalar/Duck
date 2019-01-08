@@ -54,8 +54,15 @@
                 errors: {
                     photo: ''
                 },
-                posted: false
+                posted: false,
+                timeout: null
             }
+        },
+        beforeRouteLeave (to, from, next) {
+            if (this.timeout !== null) {
+                clearTimeout(this.timeout)
+            }
+            next()
         },
         mounted() {
             this.initialize()
@@ -127,10 +134,10 @@
                         this.setErrors(response)
 
                         if (response.data.data.id) {
-                            this.posted = true;
+                            this.posted = true
                             this.reset()
 
-                            setTimeout(() => {
+                            this.timeout = setTimeout(() => {
                                 router.push({ name: 'home' })
                             }, 5000)
                         }
