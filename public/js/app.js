@@ -1830,10 +1830,10 @@ __webpack_require__.r(__webpack_exports__);
     next();
   },
   mounted: function mounted() {
-    this.initialize();
+    this.init();
   },
   methods: {
-    initialize: function initialize() {
+    init: function init() {
       var _this = this;
 
       var container = this.$refs.mapContainer;
@@ -2001,6 +2001,82 @@ __webpack_require__.r(__webpack_exports__);
 
       return false;
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/home.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/home.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'home',
+  data: function data() {
+    return {
+      map: null,
+      warsaw: {
+        lat: 52.22500222565406,
+        lng: 21.01116439483155
+      },
+      posts: []
+    };
+  },
+  methods: {
+    init: function init() {
+      var container = this.$refs.mapContainer;
+      var options = {
+        zoom: 5,
+        center: this.warsaw
+      };
+      this.map = new google.maps.Map(container, options);
+    },
+    load: function load() {
+      var _this = this;
+
+      axios.get('/api/posts/index').then(function (response) {
+        _this.posts = response.data.data.filter(function (item) {
+          return Number(item.active) == 1;
+        });
+      });
+    }
+  },
+  watch: {
+    posts: {
+      handler: function handler(newVal, oldVal) {
+        var _this2 = this;
+
+        this.posts.forEach(function (post) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(post.latitude, post.longitude),
+            map: _this2.map
+          });
+          var html = '<img src="' + post.photo + '">';
+          var infoWindow = new google.maps.InfoWindow({
+            content: html
+          });
+          marker.addListener('click', function () {
+            infoWindow.open(_this2.map, marker);
+          });
+        });
+      },
+      deep: true
+    }
+  },
+  mounted: function mounted() {
+    this.init();
+    this.load();
   }
 });
 
@@ -3177,7 +3253,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("Home")])
+  return _c("div", [
+    _c("h3", { staticClass: "mb-4" }, [_vm._v("Locations of the Yellow Duck")]),
+    _vm._v(" "),
+    _c("div", { ref: "mapContainer", staticClass: "h-500" })
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -18641,15 +18721,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_vue_vue_type_template_id_fa6affac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./home.vue?vue&type=template&id=fa6affac& */ "./resources/js/components/home.vue?vue&type=template&id=fa6affac&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./home.vue?vue&type=script&lang=js& */ "./resources/js/components/home.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _home_vue_vue_type_template_id_fa6affac___WEBPACK_IMPORTED_MODULE_0__["render"],
   _home_vue_vue_type_template_id_fa6affac___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -18663,6 +18745,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/home.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/home.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/home.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./home.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/home.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

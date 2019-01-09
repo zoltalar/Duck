@@ -65,10 +65,10 @@
             next()
         },
         mounted() {
-            this.initialize()
+            this.init()
         },
         methods: {
-            initialize() {
+            init() {
                 let container = this.$refs.mapContainer
 
                 let options = {
