@@ -5,6 +5,7 @@ Laravel 5 application based on Vuejs to show the locations of the yellow rubber 
 
 * `composer install`
 * `php artisan key:generate`
+* `php artisan passport:install`
 * `php artisan migrate`
 * `php artisan db:seed`
 * `npm install`
